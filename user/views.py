@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 # from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 
@@ -18,9 +19,22 @@ def register(request):
 
             username = form.cleaned_data.get('username')
             messages.success(request, f'Welcome {username}! Your account is created')
-            return redirect('food:index')
+            return redirect('login')
     else:
         # form = UserCreationForm()
         form = RegisterForm()
 
     return render(request, 'user/register.html', {'form': form, })
+
+
+from django.contrib.auth import logout
+
+
+def logout_view(request):
+    logout(request)
+    return render(request, 'user/logout.html')
+
+
+@login_required
+def profilepage(request):
+    return render(request, 'user/profile.html')

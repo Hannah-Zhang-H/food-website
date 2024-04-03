@@ -126,3 +126,9 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# 改变login redirect URI, 因为现在是这样的：http://localhost:8000/accounts/profile/，我现在不想走这个uri
+# 写了下面这一行，直接redirect到templates/food/index.html
+LOGIN_REDIRECT_URL = 'food:index'
+LOGIN_URL = 'login'
+

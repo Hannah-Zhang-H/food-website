@@ -28,6 +28,13 @@ urlpatterns = [
     # 类视图提供了一种更加面向对象的方式来组织视图逻辑，并且可以利用类的继承和方法重写等特性来实现更加复杂的逻辑。
     # 在给定的代码中，auth_views.LoginView 就是一个类视图，它负责处理用户登录的逻辑。通过调用 .as_view() 方法，
     # 将这个类视图转换为可调用的视图，以便在 URL 配置中使用。
-    path('login/', auth_views.LoginView.as_view(), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('login/', auth_views.LoginView.as_view(template_name='user/login.html'), name='login'),
+
+    # 老师这个写法只能通过post请求进行logout，所以注释掉
+    # path('logout/', auth_views.LogoutView.as_view(template_name='user/logout.html'), name='logout'),
+
+    # 用这个
+    path('logout/', user_views.logout_view, name='logout'),
+
+    path('profilepage/', user_views.profilepage, name='profilepage')
 ]

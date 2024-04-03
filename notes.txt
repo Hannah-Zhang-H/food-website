@@ -1,0 +1,44 @@
+
+# 改变login redirect URI, 因为现在是这样的：http://localhost:8000/accounts/profile/，我现在不想走这个uri
+# 写了下面这一行，直接redirect到templates/food/index.html
+LOGIN_REDIRECT_URL = 'food:index'
+
+
+
+# login 和logout不同，
+# 在urls.py中，写：
+# 在 Django 中，类视图是一种处理请求和生成响应的方法，它们基于类而不是函数。
+# 类视图提供了一种更加面向对象的方式来组织视图逻辑，并且可以利用类的继承和方法重写等特性来实现更加复杂的逻辑。
+# 在给定的代码中，auth_views.LoginView 就是一个类视图，它负责处理用户登录的逻辑。通过调用 .as_view() 方法，
+# 将这个类视图转换为可调用的视图，以便在 URL 配置中使用。
+path('login/', auth_views.LoginView.as_view(template_name='user/login.html'), name='login'),
+
+# 老师这个写法只能通过post请求进行logout，所以注释掉
+# path('logout/', auth_views.LogoutView.as_view(template_name='user/logout.html'), name='logout'),
+
+# 用这个
+path('logout/', user_views.logout_view, name='logout'),
+
+# 在user/views.py中：
+def logout_view(request):
+    logout(request)
+    return render(request, 'user/logout.html')
+
+
+在base.html中加了判断语句，用来查看登录用户是否已经登录。
+如果登录，显示logout，如果没有登录，显示login
+   {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+            {% endif %}
+
+
+
+# 加这个@login_required 意思是：只有用户登录了，才能访问这个页面
+# 所以django会先导航到login页面，等你输入密码后，下一个页面自动跳出来profile页面
+@login_required
+def profilepage(request):
+    return render(request, 'user/profile.html')
+但是记得要去Settings.py里加上：
+LOGIN_URL = 'login'

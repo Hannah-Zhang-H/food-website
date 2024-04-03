@@ -13,9 +13,19 @@
     <div class="navbar navbar-dark bg-dark">
         <a href="#" class="navbar-brand">FoodApp</a>
         <div class="navbar">
-            <a href="{% url 'food:create_item' %}" class="nav-item nav-link" style="color: white">Add Item</a>
-            <a href="#" class="nav-item nav-link" style="color: white">Delete Item</a>
-            <a href="#" class="nav-item nav-link" style="color: white">View Item</a>
+            <a href="{% url 'food:create_item' %}" class="nav-item nav-link" style="color: white;margin-right: 10px;">Add
+                Item</a>
+            <a href="#" class="nav-item nav-link" style="color: white; margin-right: 10px;">Delete Item</a>
+            <a href="#" class="nav-item nav-link" style="color: white; margin-right: 10px;">View Item</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}" class="nav-item nav-link"
+                   style="color: white; margin-right: 10px; ">Logout</a>
+                <a href="{% url 'profilepage' %} " class="nav-item nav-link"
+                   style="color: white; margin-right: 10px; ">Profile</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="nav-item nav-link"
+                   style="color: white; margin-right: 10px;">Login</a>
+            {% endif %}
         </div>
     </div>
 
