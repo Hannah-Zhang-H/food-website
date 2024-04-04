@@ -132,3 +132,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_REDIRECT_URL = 'food:index'
 LOGIN_URL = 'login'
 
+# 设置图片存储信息，profile page的图片上传后存到server的某个文件夹，而不是存到database，因为存储图片到database非常inefficient
+# 在这里，server意思就是我们的computer
+# 执行本行代码后，在根目录中创建一个pictures文件夹，然后在这个pictures文件夹中生成这个profile_pics文件夹来存放上传的图片
+MEDIA_ROOT = os.path.join(BASE_DIR, 'pictures')
+# 如果我们想访问这些存储的图片，就按下面的url去访问
+MEDIA_URL = '/pictures/'
