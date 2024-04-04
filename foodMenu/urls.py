@@ -18,6 +18,9 @@ from django.contrib import admin
 from django.urls import path, include
 from user import views as user_views
 from django.contrib.auth import views as auth_views
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -36,5 +39,10 @@ urlpatterns = [
     # 用这个
     path('logout/', user_views.logout_view, name='logout'),
 
-    path('profilepage/', user_views.profilepage, name='profilepage')
+    path('profilepage/', user_views.profilepage, name='profilepage'),
 ]
+
+# 这个用来显示用户上传的图片，图片存在了根目录的pictures/profile_pics目录下
+urlpatterns += [
+                  # ... the rest of your URLconf goes here...
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
