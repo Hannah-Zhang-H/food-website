@@ -81,3 +81,40 @@ urlpatterns += [
 设置用户default图片
 -> 就网上下载到指定目录就好，名字要一致。这里就是user/models.py里的：
     image = models.ImageField(default='profile_pics/default.jpg', upload_to='profile_pics')
+
+
+2024-5-5
+新增：
+# 一：
+1.用django的signal dispatcher实现当用户注册时，系统发送信号来创建user profile:
+当user/views.py中register函数中的form.save()执行时，就会触发signal。
+signal接受者是谁？为了接收信号，需要在user文件夹下新建一个signals.py文件。
+2.新建好user/signals.py后，去user/apps.py添加def ready()进行配置。
+3.现在每个用户的profile当用户注册完成并登陆后，是自动创建的。不需要admin去手动创建用户profile了。
+
+# 二：
+class based views or generic views
+
+# 三：
+当某个user创建了某个item，然后另一个user登录时，另一个user可以知道是哪个user创建的这个item。
+而我们知道：item是我们自己创建的model，包含食物的名字，价格，简介，图片等信息。user是django的内置model，那么怎么建立两者的联系呢？
+
+解决方案：
+将user作为一个variable，被item model引用。因为model是class啊！！！
+也就是：把一个model作为另一个model的foreign key。
+在food/models.py的Item model里，添加
+    user_name = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+不要忘记在terminal做migration迁移:
+python manage.py makemigrations
+python manage.py sqlmigrate food 000X根据提示的来
+python manage.py migrate
+
+
+# 四：
+在food/models.py的Item model中，添加了下面的代码：
+from django.urls import reverse
+ def get_absolute_url(self):
+        return reverse('item-detail', kwargs={'pk': self.pk})
+
+因为我们希望：在基于类的视图的情况下，我们还需要希望user在创建item时重定向url。
+这里想让用户在创建某个food item时，让django重定向到该项目的detail
